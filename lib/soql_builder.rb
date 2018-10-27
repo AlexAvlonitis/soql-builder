@@ -47,17 +47,14 @@ class SoqlBuilder
 
   def structure_query
     qs = @query[:type]
-    qs += " #{structure_fields(@query[:fields])}" unless @query[:fields].empty?
-    qs += ", (select #{ structure_fields(@query[:subquery][:fields]) } from #{ @query[:subquery][:object_table] })" unless @query[:subquery][:fields].empty?
+    qs += " #{join_fields(@query[:fields])}" unless @query[:fields].empty?
+    qs += ", (select #{ join_fields(@query[:subquery][:fields]) } from #{ @query[:subquery][:object_table] })" unless @query[:subquery][:fields].empty?
     qs += " from #{@query[:object_table]}"
     qs += " where #{@query[:where]}" unless @query[:where] == ''
     qs
   end
 
-  def structure_fields(fields)
-    fields.map.with_index do |field, index|
-      field << ',' unless fields.length - 1 == index
-      field
-    end.join(' ')
+  def join_fields(fields)
+    fields.join(', ')
   end
 end

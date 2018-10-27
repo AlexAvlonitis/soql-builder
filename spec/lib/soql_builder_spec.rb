@@ -38,5 +38,19 @@ describe SoqlBuilder do
           .to eq 'select Name, Contract__r.Name, (select quotes.name, quotes.Custom__c from Account.quotes) from Account'
       end
     end
+
+    context 'When you submit the query two times' do
+      it 'does not alter the query string' do
+        subject.fields(['Name', 'Contract__r.Name'])
+               .add_subquery(
+                 table: 'Account.quotes', fields: ['quotes.name', 'quotes.Custom__c']
+               )
+               .from('Account')
+
+        subject.query
+        expect(subject.query)
+          .to eq 'select Name, Contract__r.Name, (select quotes.name, quotes.Custom__c from Account.quotes) from Account'
+      end
+    end
   end
 end
