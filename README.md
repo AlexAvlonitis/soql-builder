@@ -30,12 +30,12 @@ pry(main)> builder.query
 
 ```
 
-**Select query with child lookup**
+**Select query with subquery**
 
 ```ruby
 pry(main)> builder.fields(['Name', 'Contract__r.Name'])
-                  .add_child_lookup(
-                    child: 'Account.Quotes',
+                  .add_subquery(
+                    table: 'Account.Quotes',
                     fields: ['Quotes.Name', 'Quotes.id']
                   )
                   .from('Account')

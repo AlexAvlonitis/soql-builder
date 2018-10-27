@@ -29,13 +29,13 @@ describe SoqlBuilder do
     context 'When we want to have a parent lookup' do
       it 'return a correct soql query' do
         subject.fields(['Name', 'Contract__r.Name'])
-               .add_child_lookup(
-                 child: 'Account.quotes', fields: ['quotes.name', 'quotes.Custom__c']
+               .add_subquery(
+                 table: 'Account.quotes', fields: ['quotes.name', 'quotes.Custom__c']
                )
                .from('Account')
 
         expect(subject.query)
-          .to eq 'select Name, Contract__r.Name , (select quotes.name, quotes.Custom__c from Account.quotes) from Account'
+          .to eq 'select Name, Contract__r.Name, (select quotes.name, quotes.Custom__c from Account.quotes) from Account'
       end
     end
   end
