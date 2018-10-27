@@ -13,11 +13,15 @@ class SoqlBuilder
   end
 
   def fields(fields = [])
-    fields_string = fields.map.with_index do |field, index|
-      field << ',' unless fields.length - 1 == index
-      field
-    end
-    add_to_query(fields_string)
+    add_to_query(structure_fields(fields))
+    self
+  end
+
+  def add_child_lookup(child:, fields: [])
+    subquery = ', (select '
+    subquery << structure_fields(fields).join(' ')
+    subquery << " from #{child})"
+    add_to_query(subquery)
     self
   end
 
@@ -35,5 +39,12 @@ class SoqlBuilder
 
   def add_to_query(partial_query)
     @query << partial_query
+  end
+
+  def structure_fields(fields)
+    fields.map.with_index do |field, index|
+      field << ',' unless fields.length - 1 == index
+      field
+    end
   end
 end
