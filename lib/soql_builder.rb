@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SoqlBuilder
   TYPES = {
     select: 'select'
@@ -19,8 +21,8 @@ class SoqlBuilder
 
   def add_child_lookup(child:, fields: [])
     subquery = ', (select '
-    subquery << structure_fields(fields).join(' ')
-    subquery << " from #{child})"
+    subquery += structure_fields(fields).join(' ')
+    subquery += " from #{child})"
     add_to_query(subquery)
     self
   end
