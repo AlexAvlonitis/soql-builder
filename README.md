@@ -28,6 +28,15 @@ builder.fields(['Name', 'Contract__r.Name'])
 builder.query
 => "select Name, Contract__r.Name from Account where id = 1"
 
+# Add a limit
+builder.fields(['Name', 'Contract__r.Name'])
+       .from('Account')
+       .where('id = 1')
+       .limit(1)
+
+builder.query
+=> "select Name, Contract__r.Name from Account where id = 1 limit 1"
+
 ```
 
 **Select query with subquery**
