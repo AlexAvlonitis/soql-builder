@@ -1,5 +1,7 @@
 # SOQL-BUILDER (BETA)
 
+[![Build Status](https://travis-ci.org/AlexAvlonitis/soql-builder.svg?branch=master)](https://travis-ci.org/AlexAvlonitis/soql-builder)
+
 A ruby SOQL query builder, it doesn't include all the available SOQL queries. Contributions are welcome.
 
 ## How to use
