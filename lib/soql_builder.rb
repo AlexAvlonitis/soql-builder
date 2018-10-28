@@ -1,60 +1,39 @@
 # frozen_string_literal: true
 
-class SoqlBuilder
-  TYPES = {
-    select: 'select'
-  }.freeze
+require_relative './soql/query'
 
-  def initialize(type:)
-    @query = {
-      type: TYPES[type],
-      fields: [],
-      subquery: {
-        object_table: '',
-        fields: []
-      },
-      object_table: '',
-      where: '',
-    }
+class SoqlBuilder
+  def initialize(type:, query: nil)
+    @query = query || Soql::Query.new
+    @query.type = type
   end
 
   def query
-    structure_query
+    @query.structure_query
   end
 
   def fields(fields = [])
-    @query[:fields] = fields
+    @query.fields = fields
     self
   end
 
   def add_subquery(table:, fields: [])
-    @query[:subquery][:object_table] = table
-    @query[:subquery][:fields] = fields
+    @query.subquery[:object_table] = table
+    @query.subquery[:fields] = fields
     self
   end
 
   def from(table)
-    @query[:object_table] = table
+    @query.object_table = table
     self
   end
 
   def where(where_condition)
-    @query[:where] = where_condition
+    @query.where = where_condition
     self
   end
 
-  private
-
-  def structure_query
-    qs = @query[:type]
-    qs += " #{join_fields(@query[:fields])}" unless @query[:fields].empty?
-    qs += ", (select #{ join_fields(@query[:subquery][:fields]) } from #{ @query[:subquery][:object_table] })" unless @query[:subquery][:fields].empty?
-    qs += " from #{@query[:object_table]}"
-    qs += " where #{@query[:where]}" unless @query[:where] == ''
-    qs
-  end
-
-  def join_fields(fields)
-    fields.join(', ')
+  def limit(limit_number)
+    @query.limit = limit_number.to_s
   end
 end

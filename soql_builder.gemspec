@@ -1,9 +1,9 @@
 $LOAD_PATH.push File.expand_path('lib', __dir__)
-require 'soql_builder/version'
+require 'soql/version'
 
 Gem::Specification.new do |s|
   s.name        = 'soql_builder'
-  s.version     = SoqlBuilder::VERSION
+  s.version     = Soql::VERSION
   s.date        = '2018-10-27'
   s.summary     = 'Ruby SOQL Builder'
   s.description = 'A ruby tool to build SOQL queries'

@@ -1,8 +1,10 @@
 require 'spec_helper'
 require 'soql_builder'
+require 'soql/query'
 
 describe SoqlBuilder do
-  let(:subject) { described_class.new(type: :select) }
+  let(:query) { Soql::Query.new }
+  let(:subject) { described_class.new(type: :select, query: query) }
 
   describe 'Build a simple soql query' do
     context 'When you construct the object with select/from/where' do
@@ -13,6 +15,18 @@ describe SoqlBuilder do
 
         expect(subject.query)
           .to eq 'select Name, Contract__r.Name from Account where id = 1'
+      end
+    end
+
+    context 'When you construct the object with select/from/where and limit' do
+      it 'returns a correct soql query' do
+        subject.fields(['Name', 'Contract__r.Name'])
+               .from('Account')
+               .where('id = 1')
+               .limit(1)
+
+        expect(subject.query)
+          .to eq 'select Name, Contract__r.Name from Account where id = 1 limit 1'
       end
     end
 
