@@ -1,4 +1,6 @@
-$LOAD_PATH.push File.expand_path('lib', __dir__)
+lib = File.expand_path('lib', __dir__)
+$LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
+
 require 'soql/version'
 
 Gem::Specification.new do |s|
@@ -8,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Ruby SOQL Builder'
   s.description = 'A ruby tool to build SOQL queries'
   s.authors     = ['Alex Avlonitis']
-  s.files       = ['lib/soql_builder.rb']
+  s.files       = Dir.glob('{bin,lib}/**/*') + %w[README.md]
   s.homepage    = 'https://github.com/AlexAvlonitis/soql-builder'
   s.license     = 'MIT'
 
