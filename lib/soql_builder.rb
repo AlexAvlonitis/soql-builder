@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './soql/query'
+require 'soql/query'
 
 class SoqlBuilder
   def initialize(type:, query: nil)
