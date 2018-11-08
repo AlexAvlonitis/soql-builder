@@ -12,6 +12,10 @@ class SoqlBuilder
     @query.structure_query
   end
 
+  def clean
+    @query.clean
+  end
+
   def fields(fields = [])
     @query.fields = fields
     self

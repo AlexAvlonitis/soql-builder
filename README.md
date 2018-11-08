@@ -77,4 +77,30 @@ builder.query
 => "select Name, Contract__r.Name, (select Quotes.Name, Quotes.id from Account.Quotes) from Account where id = 1"
 ```
 
+**Reset the query and create another one with the same object**
+
+```ruby
+builder.fields(['Name', 'Contract__r.Name'])
+
+builder.add_subquery(
+         table: 'Account.Quotes',
+         fields: ['Quotes.Name', 'Quotes.id']
+       )
+
+builder.from('Account')
+
+builder.where('id = 1')
+
+builder.query
+=> "select Name, Contract__r.Name, (select Quotes.Name, Quotes.id from Account.Quotes) from Account where id = 1"
+
+builder.clean
+
+builder.fields(['Name', 'Contract__r.Name'])
+       .from('Account')
+       .where('id = 1')
+
+builder.query
+=> "select Name, Contract__r.Name from Account where id = 1"
+```
 

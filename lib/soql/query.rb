@@ -32,6 +32,14 @@ module Soql
       qs
     end
 
+    def clean
+      @fields = []
+      @subquery = { object_table: '', fields: [] }
+      @object_table = ''
+      @where = ''
+      @limit = ''
+    end
+
     private
 
     def join_fields(fields)

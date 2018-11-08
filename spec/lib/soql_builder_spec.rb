@@ -66,5 +66,18 @@ describe SoqlBuilder do
           .to eq 'select Name, Contract__r.Name, (select quotes.name, quotes.Custom__c from Account.quotes) from Account'
       end
     end
+
+    context 'When you want to recreate a query without having to create another object' do
+      it 'resets the query' do
+        subject.fields(['Name', 'Contract__r.Name'])
+               .add_subquery(
+                 table: 'Account.quotes', fields: ['quotes.name', 'quotes.Custom__c']
+               )
+               .from('Account')
+
+        subject.clean
+        expect(subject.query).to eq 'select'
+      end
+    end
   end
 end

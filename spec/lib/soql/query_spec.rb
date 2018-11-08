@@ -22,4 +22,18 @@ describe Soql::Query do
       end
     end
   end
+
+  describe '#clean' do
+    context 'When we want to reset the query' do
+      it 'blanks all the fields' do
+        subject.type = :select
+        subject.fields = ['Name']
+        subject.object_table = 'Account'
+
+        subject.clean
+
+        expect(subject.structure_query).to eq('select')
+      end
+    end
+  end
 end
