@@ -1,4 +1,4 @@
-# SOQL-BUILDER (BETA)
+# SOQL-BUILDER
 
 [![Build Status](https://travis-ci.org/AlexAvlonitis/soql-builder.svg?branch=master)](https://travis-ci.org/AlexAvlonitis/soql-builder)
 
