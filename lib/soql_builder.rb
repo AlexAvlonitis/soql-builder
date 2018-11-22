@@ -5,39 +5,56 @@ require 'soql/query'
 class SoqlBuilder
   def initialize(type:, query: nil)
     @query = query || Soql::Query.new
-    @query.type = type
+    @type = type
+    @fields = []
+    @subqueries = []
+    @subquery = { object_table: '', fields: [] }
+    @object_table = ''
+    @where = ''
+    @limit = ''
   end
 
   def query
-    @query.structure_query
+    @query.structure_query(
+      type: @type,
+      fields: @fields,
+      subqueries: @subqueries,
+      object_table: @object_table,
+      where: @where,
+      limit: @limit
+    )
   end
 
   def clean
-    @query.clean
+    @fields = []
+    @subqueries = []
+    @object_table = ''
+    @where = ''
+    @limit = ''
   end
 
   def fields(fields = [])
-    @query.fields = fields
+    @fields = fields
     self
   end
 
   def add_subquery(table:, fields: [])
-    @query.subquery[:object_table] = table
-    @query.subquery[:fields] = fields
+    @subquery = { object_table: table, fields: fields }
+    @subqueries << @subquery
     self
   end
 
   def from(table)
-    @query.object_table = table
+    @object_table = table
     self
   end
 
   def where(where_condition)
-    @query.where = where_condition
+    @where = where_condition
     self
   end
 
   def limit(limit_number)
-    @query.limit = limit_number.to_s
+    @limit = limit_number.to_s
   end
 end

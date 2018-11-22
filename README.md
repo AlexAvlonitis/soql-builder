@@ -59,6 +59,26 @@ builder.query
 
 ```
 
+**Select query with multiple subqueries**
+
+```ruby
+builder.fields(['Name', 'Contract__r.Name'])
+       .add_subquery(
+         table: 'Account.Quotes',
+         fields: ['Quotes.Name', 'Quotes.id']
+       )
+       .add_subquery(
+         table: 'Account.Contacts',
+         fields: ['Contacts.Name']
+       )
+       .from('Account')
+       .where('id = 1')
+
+builder.query
+=> "select Name, Contract__r.Name, (select Quotes.Name, Quotes.id from Account.Quotes), (select Contacts.Name from Account.Contacts) from Account where id = 1"
+
+```
+
 **Queries can be added one at a time, instead of chaining**
 
 ```ruby

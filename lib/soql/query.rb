@@ -2,48 +2,34 @@
 
 module Soql
   class Query
-    attr_accessor :fields, :subquery, :object_table, :where, :limit
-    attr_reader :type
-
     TYPES = {
       select: 'select'
     }.freeze
 
     def initialize
-      @type = ''
-      @fields = []
-      @subquery = { object_table: '', fields: [] }
-      @object_table = ''
-      @where = ''
-      @limit = ''
+      @query = ''
     end
 
-    def type=(type)
-      @type = TYPES[type]
-    end
-
-    def structure_query
-      qs  = type
-      qs += " #{join_fields(fields)}" unless fields.empty?
-      qs += ", (select #{join_fields(subquery[:fields])} from #{subquery[:object_table]})" unless subquery[:fields].empty?
-      qs += " from #{object_table}" unless object_table == ''
-      qs += " where #{where}" unless where == ''
-      qs += " limit #{limit}" unless limit == ''
-      qs
-    end
-
-    def clean
-      @fields = []
-      @subquery = { object_table: '', fields: [] }
-      @object_table = ''
-      @where = ''
-      @limit = ''
+    def structure_query(args = {})
+      @query  = TYPES[args[:type]]
+      @query += " #{join_fields(args[:fields])}" unless args[:fields].empty?
+      @query += join_subqueries(args[:subqueries]) unless args[:subqueries].empty?
+      @query += " from #{args[:object_table]}" unless args[:object_table] == ''
+      @query += " where #{args[:where]}" unless args[:where] == ''
+      @query += " limit #{args[:limit]}" unless args[:limit] == ''
+      @query
     end
 
     private
 
     def join_fields(fields)
       fields.join(', ')
+    end
+
+    def join_subqueries(subqueries)
+      subqueries.map do |subquery|
+        ", (select #{join_fields(subquery[:fields])} from #{subquery[:object_table]})"
+      end.join
     end
   end
 end

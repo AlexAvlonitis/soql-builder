@@ -40,8 +40,8 @@ describe SoqlBuilder do
       end
     end
 
-    context 'When we want to have a parent lookup' do
-      it 'return a correct soql query' do
+    context 'When we want to query children (subquery)' do
+      it 'returns a correct soql query' do
         subject.fields(['Name', 'Contract__r.Name'])
                .add_subquery(
                  table: 'Account.quotes', fields: ['quotes.name', 'quotes.Custom__c']
@@ -50,6 +50,22 @@ describe SoqlBuilder do
 
         expect(subject.query)
           .to eq 'select Name, Contract__r.Name, (select quotes.name, quotes.Custom__c from Account.quotes) from Account'
+      end
+    end
+
+    context 'When we want to query multiple children (multiple subqueries)' do
+      it 'returns a correct soql query' do
+        subject.fields(['Name', 'Contract__r.Name'])
+               .add_subquery(
+                 table: 'Account.quotes', fields: ['quotes.name', 'quotes.Custom__c']
+               )
+               .add_subquery(
+                 table: 'Account.contacts', fields: ['contacts.name']
+               )
+               .from('Account')
+
+        expect(subject.query)
+          .to eq 'select Name, Contract__r.Name, (select quotes.name, quotes.Custom__c from Account.quotes), (select contacts.name from Account.contacts) from Account'
       end
     end
 
