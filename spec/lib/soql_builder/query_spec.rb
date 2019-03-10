@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'soql/query'
+require 'soql_builder/query'
 
-describe Soql::Query do
+describe SoqlBuilder::Query do
   let(:query) { described_class.new }
 
   let(:type) { :select }

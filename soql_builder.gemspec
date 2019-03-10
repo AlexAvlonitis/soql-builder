@@ -1,11 +1,11 @@
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift lib unless $LOAD_PATH.include?(lib)
 
-require 'soql/version'
+require 'soql_builder/version'
 
 Gem::Specification.new do |s|
   s.name        = 'soql_builder'
-  s.version     = Soql::VERSION
+  s.version     = SoqlBuilder::VERSION
   s.date        = '2018-10-27'
   s.summary     = 'Ruby SOQL Builder'
   s.description = 'A ruby tool to build SOQL queries'
