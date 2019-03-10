@@ -1,10 +1,7 @@
 require 'spec_helper'
-require 'soql_builder/query'
+require 'soql_builder/select_query'
 
-describe SoqlBuilder::Query do
-  let(:query) { described_class.new }
-
-  let(:type) { :select }
+describe SoqlBuilder::SelectQuery do
   let(:fields) { ['Name'] }
   let(:object_table) { 'Account' }
   let(:subqueries) { [] }
@@ -14,8 +11,7 @@ describe SoqlBuilder::Query do
   describe '#structure_query' do
     context 'When all objects are filled' do
       it 'returns a structured query string' do
-        expect(subject.structure_query(
-          type: type,
+        expect(described_class.structure_query(
           fields: fields,
           subqueries: subqueries,
           object_table: object_table,
